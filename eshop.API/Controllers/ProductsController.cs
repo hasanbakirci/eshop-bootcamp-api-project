@@ -2,6 +2,7 @@
 using eshop.Models.DataTransferObjects.Requests;
 using eshop.Models.DataTransferObjects.Responses;
 using eshop.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,11 +29,13 @@ namespace eshop.API.Controllers
             return Ok(products);
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetProductId(int id){
             ProductDetailedResponse product = await _productService.GetProduct(id);
             return Ok(product);
         }
         [HttpPost]
+        [Authorize(Roles ="Admin,Editor")]
         public async Task<IActionResult> AddProduct(AddProductRequest addProductRequest){
             if(ModelState.IsValid){
                 int lastProductId = await _productService.AddNewProduct(addProductRequest);

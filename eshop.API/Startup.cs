@@ -1,3 +1,4 @@
+using eshop.API.Security;
 using eshop.Data.Repositories;
 using eshop.Services;
 using eshop.Services.Mapping;
@@ -40,6 +41,9 @@ namespace eshop.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "eshop.API", Version = "v1" });
             });
+
+            services.AddAuthentication("Basic")
+            .AddScheme<BasicAuthenticationOption,BasicAuthenticationHandler>("Basic",null);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +59,8 @@ namespace eshop.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
