@@ -1,4 +1,5 @@
 ﻿using eshop.Models;
+using eshop.Models.DataTransferObjects.Requests;
 using eshop.Models.DataTransferObjects.Responses;
 using eshop.Services;
 using Microsoft.AspNetCore.Http;
@@ -14,17 +15,30 @@ namespace eshop.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService productService;
+        private readonly IProductService _productService;
 
         public ProductsController(IProductService productService)
         {
-            this.productService = productService;
+            _productService = productService;
         }
         [HttpGet]
         public async  Task<IActionResult> GetProducts()
         {            
-            var products = await productService.GetProducts();
+            var products = await _productService.GetProducts();
             return Ok(products);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductId(int id){
+            ProductDetailedResponse product = await _productService.GetProduct(id);
+            return Ok(product);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(AddProductRequest addProductRequest){
+            if(ModelState.IsValid){
+                int lastProductId = await _productService.AddNewProduct(addProductRequest);
+                return CreatedAtAction(nameof(GetProductId), new {id = lastProductId}, null);
+            }
+            return BadRequest(ModelState);
         }
     }
 }

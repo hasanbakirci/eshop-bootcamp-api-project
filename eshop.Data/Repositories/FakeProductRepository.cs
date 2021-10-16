@@ -9,33 +9,43 @@ namespace eshop.Data.Repositories
 {
     public class FakeProductRepository : IProductRepository
     {
-        private List<Product> products;
+        private List<Product> _products;
         public FakeProductRepository()
         {
-            products = new List<Product>
+            _products = new List<Product>
             {
-                new Product{ Id=1, Name="Product Sample 1", Price=5, Description="Sample Desc.", ImageUrl=string.Empty},
-                new Product{ Id=2, Name="Product Sample 2", Price=5, Description="Sample Desc.", ImageUrl=string.Empty},
-                new Product{ Id=3, Name="Product Sample 3", Price=5, Description="Sample Desc.", ImageUrl=string.Empty},
-                new Product{ Id=4, Name="Product Sample 4", Price=5, Description="Sample Desc.", ImageUrl=string.Empty},
+                new Product {Id=1,Name="Name 1",Price=100,Description="Description 1",ImageUrl="url 1"},
+                new Product {Id=2,Name="Name 2",Price=200,Description="Description 2",ImageUrl="url 2"},
+                new Product {Id=3,Name="Name 3",Price=300,Description="Description 3",ImageUrl="url 3"},
+                new Product {Id=4,Name="Name 4",Price=400,Description="Description 4",ImageUrl="url 4"},
+                new Product {Id=5,Name="Name 5",Price=500,Description="Description 5",ImageUrl="url 5"},
+                new Product {Id=6,Name="Name 6",Price=600,Description="Description 6",ImageUrl="url 6"},
+                new Product {Id=7,Name="Name 7",Price=700,Description="Description 7",ImageUrl="url 7"}
 
             };
         }
 
-
-        async Task<IEnumerable<Product>> IRepository<Product>.GetAllEntities()
+        public async Task<int> AddProduct(Product product)
         {
-            return await Task.FromResult(products);
+            product.Id = _products[_products.Count -1].Id +1;
+            _products.Add(product);
+            return await Task.FromResult(product.Id);
         }
 
-        Task<Product> IRepository<Product>.GetEntityById(int id)
+        public async Task<Product> GetProductsByName(string name)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(_products.Find(x => x.Name == name));
         }
 
-        Task<IEnumerable<Product>> IProductRepository.GetProductsByName()
+        public async Task<IEnumerable<Product>> GetAllEntities()
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(_products);
         }
+
+        public async Task<Product> GetEntityById(int id)
+        {
+            return await Task.FromResult(_products.Find(x => x.Id == id));
+        }
+
     }
 }
