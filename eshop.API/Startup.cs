@@ -2,6 +2,7 @@ using eshop.API.Security;
 using eshop.Data.Repositories;
 using eshop.Services;
 using eshop.Services.Mapping;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,10 +11,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace eshop.API
@@ -41,9 +44,29 @@ namespace eshop.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "eshop.API", Version = "v1" });
             });
+            // ---- Bu basic içindi
+            // services.AddAuthentication("Basic")
+            // .AddScheme<BasicAuthenticationOption,BasicAuthenticationHandler>("Basic",null);
+            //              -----------------       JWT          -------------------
+            // JWT Bearer için aşağıdaki kodları kullandık, basic iptal edildi.
+            var bearer = Configuration.GetSection("Bearer"); // appsettings.json a ulaştı
+            var issuer = bearer["Issuer"];
+            var audience = bearer["Audience"];
+            var securityKey = bearer["SecurityKey"];
+            //Jwt nin nasıl üretileceğini ve oynaylanacağının kurallarını yazdık
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(option =>{
+                        option.TokenValidationParameters = new TokenValidationParameters{
+                            ValidateActor=true,
+                            ValidateIssuer=true,
+                            ValidateAudience=true,
+                            ValidateIssuerSigningKey=true,
+                            ValidIssuer = issuer,
+                            ValidAudience = audience,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey))
+                        };
+                    });
 
-            services.AddAuthentication("Basic")
-            .AddScheme<BasicAuthenticationOption,BasicAuthenticationHandler>("Basic",null);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
