@@ -25,16 +25,16 @@ namespace eshop.Data.Repositories
             };
         }
 
-        public async Task<int> AddProduct(Product product)
+        public async Task<int> Add(Product product)
         {
             product.Id = _products[_products.Count -1].Id +1;
             _products.Add(product);
             return await Task.FromResult(product.Id);
         }
 
-        public async Task<Product> GetProductsByName(string name)
+        public Task<IEnumerable<Product>> GetProductsByName(string name)
         {
-            return await Task.FromResult(_products.Find(x => x.Name == name));
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Product>> GetAllEntities()
@@ -47,5 +47,19 @@ namespace eshop.Data.Repositories
             return await Task.FromResult(_products.Find(x => x.Id == id));
         }
 
+        public Task<bool> ProductIsExist(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Product> Update(Product entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

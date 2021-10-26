@@ -35,5 +35,8 @@ namespace eshop.Services.Extensions
         public static Product ConvertToEntity(this AddProductRequest addProductRequest, IMapper mapper){
             return mapper.Map<Product>(addProductRequest);
         }
+        public static Category ConvertToCategory(this AddCategoryRequest addCategoryRequest, IMapper mapper){
+            return mapper.Map<Category>(addCategoryRequest);
+        }
     }
 }

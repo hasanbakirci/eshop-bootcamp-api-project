@@ -42,7 +42,7 @@ namespace eshop.Services
         public async Task<int> AddNewProduct(AddProductRequest addProductRequest)
         {
             var product = addProductRequest.ConvertToEntity(_mapper);
-            int id = await _productRepository.AddProduct(product);
+            int id = await _productRepository.Add(product);
             return id;
         }
     }

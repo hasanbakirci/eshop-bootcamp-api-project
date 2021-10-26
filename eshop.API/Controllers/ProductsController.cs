@@ -35,11 +35,11 @@ namespace eshop.API.Controllers
             return Ok(product);
         }
         [HttpPost]
-        [Authorize(Roles ="Admin,Editor")]
+        //[Authorize(Roles ="Admin,Editor")]
         public async Task<IActionResult> AddProduct(AddProductRequest addProductRequest){
             if(ModelState.IsValid){
                 int lastProductId = await _productService.AddNewProduct(addProductRequest);
-                return CreatedAtAction(nameof(GetProductId), new {id = lastProductId}, null);
+                return Ok(new {id = lastProductId, name = addProductRequest.Name});
             }
             return BadRequest(ModelState);
         }

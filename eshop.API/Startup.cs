@@ -1,12 +1,15 @@
 using eshop.API.Security;
+using eshop.Data.Context;
 using eshop.Data.Repositories;
 using eshop.Services;
+using eshop.Services.CategoryService;
 using eshop.Services.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,7 +39,10 @@ namespace eshop.API
 
             services.AddControllers();
             services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IProductRepository, FakeProductRepository>();
+            services.AddScoped<IProductRepository, EfProductRepository>();
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 
             services.AddAutoMapper(typeof(MappingProfile));
 
@@ -66,6 +72,10 @@ namespace eshop.API
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey))
                         };
                     });
+
+            //Db için
+            var connectionString = Configuration.GetConnectionString("db");
+            services.AddDbContext<EshopDbContext>(option => option.UseNpgsql(connectionString));
 
         }
 

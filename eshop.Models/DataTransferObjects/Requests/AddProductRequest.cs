@@ -15,6 +15,6 @@ namespace eshop.Models.DataTransferObjects.Requests
         public int? StockCount { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
-        public List<string> Properties { get; set; }
+        public int CategoryId { get; set; }
     }
 }
