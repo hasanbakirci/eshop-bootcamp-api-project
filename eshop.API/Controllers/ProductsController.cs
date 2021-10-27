@@ -1,4 +1,5 @@
-﻿using eshop.Models;
+﻿using eshop.API.Filters;
+using eshop.Models;
 using eshop.Models.DataTransferObjects.Requests;
 using eshop.Models.DataTransferObjects.Responses;
 using eshop.Services.ProductService;
@@ -50,25 +51,27 @@ namespace eshop.API.Controllers
             return BadRequest(ModelState);
         }
         [HttpPut("{id}")]
+        [ItemExists]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductRequest updateProductRequest){
-            var isExist = await _productService.ProductIsExist(id);
-            if(isExist){
+            //var isExist = await _productService.ProductIsExist(id);
+            //if(isExist){
                 if(ModelState.IsValid){
                     var product = await _productService.UpdateProduct(id,updateProductRequest);
                     return Ok(product);
                 }
                 return BadRequest(ModelState);
-            }
-            return NotFound();
+            //}
+            //return NotFound();
         }
         [HttpDelete("{id}")]
+        [ItemExists]
         public async Task<IActionResult> Delete(int id){
-            var isExist = await _productService.ProductIsExist(id);
-            if(isExist){
+            //var isExist = await _productService.ProductIsExist(id);
+            //if(isExist){
                 var product = await _productService.DeleteProduct(id);
                 return Ok(product);
-            }
-            return BadRequest(ModelState);
+            //}
+            //return BadRequest(ModelState);
         }
     }
 }
