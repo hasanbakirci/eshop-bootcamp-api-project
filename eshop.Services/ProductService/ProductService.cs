@@ -10,7 +10,7 @@ using eshop.Models.Entities;
 using AutoMapper;
 using eshop.Models.DataTransferObjects.Requests;
 
-namespace eshop.Services
+namespace eshop.Services.ProductService
 {
     public class ProductService : IProductService
     {
@@ -39,11 +39,35 @@ namespace eshop.Services
             return dto;
         }
 
-        public async Task<int> AddNewProduct(AddProductRequest addProductRequest)
+        public async Task<int> AddProduct(AddProductRequest addProductRequest)
         {
-            var product = addProductRequest.ConvertToEntity(_mapper);
+            var product = addProductRequest.ConvertToProduct(_mapper);
             int id = await _productRepository.Add(product);
             return id;
+        }
+
+        public async Task<IEnumerable<ProductSimpleResponse>> GetProductsByName(string name)
+        {
+            var products = await _productRepository.GetProductsByName(name);
+            var response = products.ConvertToSimpleResponseListDto(_mapper);
+            return response;
+        }
+
+        public async Task<bool> ProductIsExist(int id)
+        {
+            return await _productRepository.ProductIsExist(id);
+        }
+
+        public async Task<ProductSimpleResponse> UpdateProduct(int id,UpdateProductRequest updateProductRequest)
+        {
+            var product = updateProductRequest.ConvertToProduct(_mapper);
+            var result = await _productRepository.Update(id,product);
+            return result.ConvertToSimpleProductDto(_mapper);
+        }
+
+        public async Task<int> DeleteProduct(int id)
+        {
+            return await _productRepository.Delete(id);
         }
     }
 }

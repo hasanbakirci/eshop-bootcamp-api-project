@@ -18,11 +18,16 @@ namespace eshop.API.Controllers
         {
             _categoryService = categoryService;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetCategories(){
+            var result = await _categoryService.GetCategories();
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddCategory(AddCategoryRequest request){
             if(ModelState.IsValid){
-                int lastCategoryId = await _categoryService.AddNewCategory(request);
+                int lastCategoryId = await _categoryService.AddCategory(request);
                 return Ok(new{id = lastCategoryId, name = request.Name});
             }
             return BadRequest(ModelState);

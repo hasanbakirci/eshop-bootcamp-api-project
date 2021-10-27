@@ -1,7 +1,7 @@
 using eshop.API.Security;
 using eshop.Data.Context;
 using eshop.Data.Repositories;
-using eshop.Services;
+using eshop.Services.ProductService;
 using eshop.Services.CategoryService;
 using eshop.Services.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

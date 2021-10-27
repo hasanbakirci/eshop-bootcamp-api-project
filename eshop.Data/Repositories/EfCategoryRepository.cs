@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using eshop.Data.Context;
 using eshop.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace eshop.Data.Repositories
 {
@@ -23,24 +24,34 @@ namespace eshop.Data.Repositories
             return entity.Id;
         }
 
-        public Task<int> Delete(int id)
+        public async Task<bool> CategoryIsExist(int id)
         {
-            throw new NotImplementedException();
+            return await _context.categories.AnyAsync(c => c.Id == id);
         }
 
-        public Task<IEnumerable<Category>> GetAllEntities()
+        public async Task<int> Delete(int id)
         {
-            throw new NotImplementedException();
+            var category = await _context.categories.SingleOrDefaultAsync(c => c.Id == id);
+            _context.Remove(category);
+            var result = await _context.SaveChangesAsync();
+            return result;
         }
 
-        public Task<Category> GetEntityById(int id)
+        public async Task<IEnumerable<Category>> GetAllEntities()
         {
-            throw new NotImplementedException();
+            return await _context.categories.ToListAsync();
         }
 
-        public Task<Category> Update(Category entity)
+        public async Task<Category> GetEntityById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.categories.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Category> Update(int id,Category entity)
+        {
+            _context.categories.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
     }
 }

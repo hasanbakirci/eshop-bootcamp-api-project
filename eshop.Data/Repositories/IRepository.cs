@@ -12,7 +12,7 @@ namespace eshop.Data.Repositories
         Task<IEnumerable<T>> GetAllEntities();
         Task<T> GetEntityById(int id);
         Task<int> Add(T entity);
-        Task<T> Update(T entity);
+        Task<T> Update(int id,T entity);
         Task<int> Delete(int id);
 
     }

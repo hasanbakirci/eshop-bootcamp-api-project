@@ -59,9 +59,10 @@ namespace eshop.Data.Repositories
             return await _context.products.AnyAsync(p => p.Id == id);
         }
 
-        public async Task<Product> Update(Product entity)
+        public async Task<Product> Update(int id,Product entity)
         {
-            _context.products.Update(entity);
+            entity.Id = id;
+            var result = _context.products.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
         }

@@ -16,9 +16,11 @@ namespace eshop.Services.Mapping
             CreateMap<Product,ProductSimpleResponse>(); //.ReverseMap(); tersi çevirme ihtiyacı olursa kullanılabilir.
             CreateMap<Product,ProductDetailedResponse>();
             CreateMap<AddProductRequest,Product>();
+            CreateMap<UpdateProductRequest,Product>();
 
 
             CreateMap<AddCategoryRequest,Category>();
+            CreateMap<Category,CategorySimpleResponse>().ReverseMap();
         }
     }
 }

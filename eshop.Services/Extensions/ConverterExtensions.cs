@@ -28,15 +28,28 @@ namespace eshop.Services.Extensions
             // return productSimpleResponses;
             return responses;
         }
+        public static ProductSimpleResponse ConvertToSimpleProductDto(this Product product, IMapper mapper){ 
+            var response = mapper.Map<ProductSimpleResponse>(product);
+            return response;
+        }
         public static ProductDetailedResponse ConvertToDetailedProductResponse(this Product product, IMapper mapper){
             var response = mapper.Map<ProductDetailedResponse>(product);
             return response;
         }
-        public static Product ConvertToEntity(this AddProductRequest addProductRequest, IMapper mapper){
+        public static Product ConvertToProduct(this AddProductRequest addProductRequest, IMapper mapper){
+            return mapper.Map<Product>(addProductRequest);
+        }
+        public static Product ConvertToProduct(this UpdateProductRequest addProductRequest, IMapper mapper){
             return mapper.Map<Product>(addProductRequest);
         }
         public static Category ConvertToCategory(this AddCategoryRequest addCategoryRequest, IMapper mapper){
             return mapper.Map<Category>(addCategoryRequest);
+        }
+        public static IEnumerable<CategorySimpleResponse> ConvertToSimpleCategoryListDto(this IEnumerable<Category> categories,
+            IMapper mapper)
+        {
+            var responses = mapper.Map<IEnumerable<CategorySimpleResponse>>(categories);
+            return responses;
         }
     }
 }

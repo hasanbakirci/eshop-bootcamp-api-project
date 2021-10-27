@@ -52,7 +52,7 @@ namespace eshop.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Product> Update(Product entity)
+        public Task<Product> Update(int id,Product entity)
         {
             throw new NotImplementedException();
         }
